@@ -15,7 +15,7 @@ public class GestorContactos {
         contactos = new ArrayList<>();
     }
 
-    public Contacto agregarContacto (String nombre, String apellido,String telefono,String correo,
+    public void agregarContacto (String nombre, String apellido,String telefono,String correo,
     MonthDay cumpleanos) throws Exception{
         if(nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || correo.isEmpty() || cumpleanos == null){
             throw new Exception("Todos los campos son obligatorios");
@@ -26,28 +26,31 @@ public class GestorContactos {
         if(!correo.contains("@")){
             throw new Exception("El correo no es valido");
         }
-        return new Contacto(nombre, apellido, telefono, correo, cumpleanos);
+        Contacto contacto = new Contacto(nombre, apellido, telefono, correo, cumpleanos);
+        contactos.add(contacto);
+
+
     }
 
     public void eliminarContacto(String telefono) throws Exception{
-        Contacto contactoEliminar=obtenerContacto(telefono);
+        Contacto contactoEliminar=obtenerContactoTelefono(telefono);
         if(contactoEliminar == null){
             throw new Exception("Contacto no encontrado");
         }
         contactos.remove(contactoEliminar);
     }
 
-    public void actualizarContacto(String telfonoActualizar, String nombre, String apellido, String telefonoNuevo, String correo,MonthDay cumpleanos)throws Exception{
+    public void actualizarContacto(String telefonoActualizar, String nombre, String apellido, String telefonoNuevo, String correo,MonthDay cumpleanos)throws Exception{
         if(nombre.isEmpty()||apellido.isEmpty()||telefonoNuevo.isEmpty()||correo.isEmpty()||cumpleanos == null ){
             throw new Exception("Los campos son obligatorios");
         }
         for (Contacto contacto: contactos) {
             if(contacto.getTelefono().equals(telefonoNuevo)){
-                throw new Exception("El numero telefonico ya existe en la lista de contactos");
+                throw new Exception("El numero telefónico ya existe en la lista de contactos");
             }
         }
 
-        Contacto contactoActulizar=obtenerContacto(telfonoActualizar);
+        Contacto contactoActulizar = obtenerContactoTelefono(telefonoActualizar);
         if(contactoActulizar == null){
             throw new Exception("Contacto no encontrado");
         }
@@ -60,7 +63,7 @@ public class GestorContactos {
 
     }
 
-    private Contacto obtenerContacto(String telefono){
+    private Contacto obtenerContactoTelefono(String telefono){
         Contacto contactoBuscado = null;
         for (Contacto contacto : contactos) {
             if( contacto.getTelefono().equals(telefono)){
@@ -70,4 +73,13 @@ public class GestorContactos {
         return contactoBuscado;
     }
 
+    private Contacto obtenerContactoNombre(String nombre){
+        Contacto contactoBuscado = null;
+        for (Contacto contacto : contactos) {
+            if( contacto.getNombre().equals(nombre)){
+                contactoBuscado = contacto;
+            }
+        }
+        return contactoBuscado;
+    }
 }
