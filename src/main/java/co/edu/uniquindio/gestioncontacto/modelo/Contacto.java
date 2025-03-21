@@ -5,6 +5,7 @@ import lombok.Getter;
 
 
 import java.time.LocalDate;
+import java.time.MonthDay;
 
 
 @Getter
@@ -12,5 +13,5 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class Contacto {
     private String nombre, apellido, telefono, correo;
-    private LocalDate cumpleanos;
+    private MonthDay cumpleanos;
 }
