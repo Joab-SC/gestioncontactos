@@ -1,5 +1,5 @@
 package co.edu.uniquindio.gestioncontacto.modelo;
 
-public enum TIpoBusquedaContactos {
+public enum TipoBusquedaContactos {
     NOMBRE, TELEFONO;
 }

@@ -29,17 +29,6 @@ public class RepositorioContacto implements IrepositorioContacto {
         return contactos.stream().filter(c -> c.getTelefono().equalsIgnoreCase(telefono)).findFirst().orElse(null);
     }
 
-    public Contacto obtenerContactoNombre(String nombre){
-        return contactos.stream().filter(c -> c.getNombre().equalsIgnoreCase(nombre)).findFirst().orElse(null);
-    }
-
-    public ObservableList<Contacto> obtenerContactosTelefono(String telefono) {
-        return FXCollections.observableArrayList(contactos.stream()
-                .filter(c -> telefono.equalsIgnoreCase(c.getTelefono()))
-                .collect(Collectors.toList())
-        );
-    }
-
     public ObservableList<Contacto> obtenerContactosNombre(String nombre) {
         return FXCollections.observableArrayList(contactos.stream()
                 .filter(c -> nombre.equalsIgnoreCase(c.getNombre()))
