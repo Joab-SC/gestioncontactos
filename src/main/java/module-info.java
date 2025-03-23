@@ -4,6 +4,7 @@ module co.edu.uniquindio.gestioncontacto {
 
 
     opens co.edu.uniquindio.gestioncontacto to javafx.fxml;
+    opens co.edu.uniquindio.gestioncontacto.controller to javafx.fxml;
     exports co.edu.uniquindio.gestioncontacto;
     requires static lombok;
 }
