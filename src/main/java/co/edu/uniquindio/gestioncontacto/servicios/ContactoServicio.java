@@ -81,4 +81,8 @@ public class ContactoServicio {
         if(contactosNombre.isEmpty()) {throw new Exception("No existen contactos con ese nombre");}
         return contactosNombre;
     }
+
+    public ObservableList<Contacto> obtenerContactos(){
+        return repositorioContacto.obtenerContactos();
+    }
 }

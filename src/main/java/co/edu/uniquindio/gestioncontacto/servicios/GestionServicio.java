@@ -40,6 +40,10 @@ public class GestionServicio {
     public ObservableList<Contacto> filtrarContactosNombre(String nombre) throws Exception {
         return filtrarContactosNombre(nombre);
     }
+
+    public ObservableList<Contacto> obtenerContactos(){
+        return contactoServicio.obtenerContactos();
+    }
 }
 
 

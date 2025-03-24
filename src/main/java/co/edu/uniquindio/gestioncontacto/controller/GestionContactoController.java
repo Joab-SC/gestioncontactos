@@ -6,6 +6,7 @@ import co.edu.uniquindio.gestioncontacto.servicios.ContactoServicio;
 import co.edu.uniquindio.gestioncontacto.servicios.GestionServicio;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -78,6 +79,7 @@ public class GestionContactoController {
 
         private GestionServicio gestionServicio;
 
+        private Contacto contactoSeleccionado;
         @FXML
         public void initialize(){
             gestionServicio= App.getGestionServicio();
@@ -86,6 +88,30 @@ public class GestionContactoController {
             tbcTelefono.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono()));
             tbcCorreo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCorreo()));
             tbcCumple.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().obtenerCumpleCadenas()));
+            choiseTipoBusquedaContacto.setItems(FXCollections.observableArrayList(TipoBusquedaContactos.values()));
+            agregarListener();
+            setContactos();
+        }
+
+        public void mostrarInformacionContacto(Contacto contacto){
+                txtNombre.setText(contacto.getNombre());
+                txtApellido.setText(contacto.getApellido());
+                txtTelefono.setText(contacto.getTelefono());
+                txtCorreo.setText(contacto.getCorreo());
+                txtDia.setText(String.valueOf(contacto.getCumpleanos().getDayOfMonth()));
+                txtMes.setText(String.valueOf(contacto.getCumpleanos().getMonth()));
+        }
+
+        // Agregar listener para detectar selección de cliente
+        private void agregarListener() {
+                tblListContactos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+                        contactoSeleccionado = newValue;
+                        mostrarInformacionContacto(contactoSeleccionado);
+                });
+        }
+
+        public void setContactos(){
+                tblListContactos.setItems(gestionServicio.obtenerContactos());
         }
         @FXML
         void handleBtnActualizar(ActionEvent event) {
