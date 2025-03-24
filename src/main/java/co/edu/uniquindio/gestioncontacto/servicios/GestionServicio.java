@@ -16,7 +16,7 @@ public class GestionServicio {
     }
 
     public void registrarContacto(String nombre, String apellido, String telefono, String correo, int dia, int mes) throws Exception {
-        MonthDay cumple = MonthDay.of(dia, mes);
+        MonthDay cumple = MonthDay.of(mes, dia);
         contactoServicio.registrarContacto(nombre, apellido, telefono, correo, cumple);
     }
 
@@ -25,7 +25,7 @@ public class GestionServicio {
     }
 
     public void actualizarContacto(String telefonoActualizar, String nombre, String apellido, String telefonoNuevo, String correo, int dia, int mes) throws Exception {
-        MonthDay cumple = MonthDay.of(dia, mes);
+        MonthDay cumple = MonthDay.of(mes, dia);
         contactoServicio.actualizarContacto(telefonoActualizar, nombre, apellido, telefonoNuevo, correo, cumple);
     }
 

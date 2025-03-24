@@ -123,9 +123,24 @@ public class GestionContactoController {
         public void setContactos(){
                 tblListContactos.setItems(gestionServicio.obtenerContactos());
         }
+
+
         @FXML
         void handleBtnActualizar(ActionEvent event) {
-                System.out.println("Actualizando Contacto");
+                String telefonoActualizar=contactoSeleccionado.getTelefono();
+                String nombre= txtNombre.getText();
+                String apellido= txtApellido.getText();
+                String telefono= txtTelefono.getText();
+                String correo= txtCorreo.getText();
+                int dia= Integer.parseInt(txtDia.getText());
+                int mes= Integer.parseInt(txtMes.getText());
+                try {gestionServicio.actualizarContacto(telefonoActualizar,nombre, apellido,telefono, correo,dia, mes);} catch (
+                        Exception e) {
+                        App.mostrarAlerta("Error",e.getMessage());
+                }
+                setContactos();
+                tblListContactos.refresh();
+
         }
 
         @FXML
@@ -135,17 +150,40 @@ public class GestionContactoController {
 
         @FXML
         void handleBtnEliminar(ActionEvent event) {
-                System.out.println("Actualizando Contacto");
+                if (contactoSeleccionado==null){
+                        App.mostrarAlerta("Error","No se seleccina ningun contacto");
+                        return;
+                }
+                String telefonoEliminar=contactoSeleccionado.getTelefono();
+                try{gestionServicio.eliminarContacto(telefonoEliminar);}
+                catch (Exception e){
+                        App.mostrarAlerta("Error",e.getMessage());
+                }
+                setContactos();
+                tblListContactos.refresh();
+
         }
 
         @FXML
         void handleBtnFiltrar(ActionEvent event) {
-                System.out.println("Actualizando Contacto");
+
         }
 
         @FXML
         void handleBtnRegistrar(ActionEvent event) {
-                System.out.println("Actualizando Contacto");
+                String nombre= txtNombre.getText();
+                String apellido= txtApellido.getText();
+                String telefono= txtTelefono.getText();
+                String correo= txtCorreo.getText();
+                int dia= Integer.parseInt(txtDia.getText());
+                int mes= Integer.parseInt(txtMes.getText());
+
+                try {gestionServicio.registrarContacto(nombre, apellido,telefono, correo,dia, mes);} catch (
+                        Exception e) {
+                    App.mostrarAlerta("Error",e.getMessage());
+                }
+                setContactos();
+                tblListContactos.refresh();
         }
 
         @FXML

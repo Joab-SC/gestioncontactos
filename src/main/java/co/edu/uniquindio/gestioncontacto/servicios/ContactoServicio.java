@@ -68,6 +68,10 @@ public class ContactoServicio {
 
     public ObservableList<Contacto> filtrarContactosNombreTelefono(TipoBusquedaContactos tipoBusqueda, String parametro) throws Exception {
         ObservableList<Contacto> contactosFiltrados = FXCollections.observableArrayList();;
+        if (parametro.isBlank()){
+            throw new Exception("Debe ingresar el valor a buscar");
+        }
+
         switch (tipoBusqueda) {
             case NOMBRE -> contactosFiltrados = filtrarContactosNombre(parametro);
             case TELEFONO -> contactosFiltrados.add(buscarContactoTelefono(parametro));
