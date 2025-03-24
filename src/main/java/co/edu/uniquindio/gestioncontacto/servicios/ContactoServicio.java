@@ -26,6 +26,12 @@ public class ContactoServicio {
         if (!correo.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")){
             throw new Exception("El correo no es valido");
         }
+
+        for (Contacto contacto : repositorioContacto.obtenerContactos()) {
+            if (contacto.getTelefono().equals(telefono)) {
+                throw new Exception("El numero telefónico ya existe en la lista de contactos");
+            }
+        }
         Contacto contacto = new Contacto(nombre, apellido, telefono, correo, cumpleanos);
         repositorioContacto.agregarContacto(contacto);
     }
@@ -42,13 +48,14 @@ public class ContactoServicio {
         if (nombre.isEmpty() || apellido.isEmpty() || telefonoNuevo.isEmpty() || correo.isEmpty() || cumpleanos == null) {
             throw new Exception("Los campos son obligatorios");
         }
+
+        Contacto contactoActulizar = buscarContactoTelefono(telefonoActualizar);
+
         for (Contacto contacto : repositorioContacto.obtenerContactos()) {
-            if (contacto.getTelefono().equals(telefonoNuevo)) {
+            if (contacto.getTelefono().equals(telefonoNuevo) && contacto != contactoActulizar) {
                 throw new Exception("El numero telefónico ya existe en la lista de contactos");
             }
         }
-
-        Contacto contactoActulizar = buscarContactoTelefono(telefonoActualizar);
 
         contactoActulizar.setNombre(nombre);
         contactoActulizar.setApellido(apellido);
@@ -58,6 +65,9 @@ public class ContactoServicio {
     }
 
     public Contacto buscarContactoTelefono(String telefono) throws Exception {
+        if (telefono.isBlank()){
+            throw new Exception("Debe ingresar el telefono a buscar");
+        }
         Contacto contactoBuscado = repositorioContacto.obtenerContactoTelefono(telefono);
         if (contactoBuscado == null) {
             throw new Exception("El contacto no fue encontrado");
@@ -72,6 +82,10 @@ public class ContactoServicio {
             throw new Exception("Debe ingresar el valor a buscar");
         }
 
+        if (tipoBusqueda  == null){
+            throw new Exception("Debe seleccionar el tipo de filtro");
+        }
+
         switch (tipoBusqueda) {
             case NOMBRE -> contactosFiltrados = filtrarContactosNombre(parametro);
             case TELEFONO -> contactosFiltrados.add(buscarContactoTelefono(parametro));
@@ -81,6 +95,9 @@ public class ContactoServicio {
 
 
     public ObservableList<Contacto> filtrarContactosNombre(String nombre) throws Exception {
+        if (nombre.isBlank()){
+            throw new Exception("Debe ingresar el nombre a buscar");
+        }
         ObservableList<Contacto> contactosNombre = repositorioContacto.obtenerContactosNombre(nombre);
         if(contactosNombre.isEmpty()) {throw new Exception("No existen contactos con ese nombre");}
         return contactosNombre;
@@ -88,5 +105,13 @@ public class ContactoServicio {
 
     public ObservableList<Contacto> obtenerContactos(){
         return repositorioContacto.obtenerContactos();
+    }
+
+    public static String obtenerContactosCadena(ObservableList<Contacto> contactos) {
+        String cadena = "Contactos:\n";
+        for (Contacto contacto : contactos) {
+            cadena += contacto.toString() + "\n";
+        }
+        return cadena;
     }
 }

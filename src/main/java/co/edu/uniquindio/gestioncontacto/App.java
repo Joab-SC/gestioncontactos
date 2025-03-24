@@ -47,4 +47,15 @@ public class App extends Application {
         alert.showAndWait();
     }
 
+    public static void mostrarMensaje(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.setMinHeight(300); // Aumenta el alto
+
+        alert.showAndWait();
+    }
+
 }

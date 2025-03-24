@@ -34,16 +34,17 @@ public class GestionServicio {
     }
 
     public ObservableList<Contacto> filtrarContactosNombreTelefono(TipoBusquedaContactos tipoBusqueda, String parametro) throws Exception {
-        return filtrarContactosNombreTelefono(tipoBusqueda, parametro);
+        return contactoServicio.filtrarContactosNombreTelefono(tipoBusqueda, parametro);
     }
 
     public ObservableList<Contacto> filtrarContactosNombre(String nombre) throws Exception {
-        return filtrarContactosNombre(nombre);
+        return contactoServicio.filtrarContactosNombre(nombre);
     }
 
     public ObservableList<Contacto> obtenerContactos(){
         return contactoServicio.obtenerContactos();
     }
+
 }
 
 

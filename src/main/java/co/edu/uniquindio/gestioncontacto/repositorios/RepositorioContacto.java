@@ -39,5 +39,4 @@ public class RepositorioContacto implements IrepositorioContacto {
     public ObservableList<Contacto> obtenerContactos(){
         return contactos;
     }
-
 }

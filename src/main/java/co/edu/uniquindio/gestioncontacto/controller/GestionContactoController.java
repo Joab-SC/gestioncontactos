@@ -39,6 +39,9 @@ public class GestionContactoController {
         private Button btnRegistrar;
 
         @FXML
+        private Button btnLimpiarCampos;
+
+        @FXML
         private ComboBox<TipoBusquedaContactos> choiseTipoBusquedaContacto;
 
         @FXML
@@ -109,7 +112,7 @@ public class GestionContactoController {
                 txtTelefono.setText(contacto.getTelefono());
                 txtCorreo.setText(contacto.getCorreo());
                 txtDia.setText(String.valueOf(contacto.getCumpleanos().getDayOfMonth()));
-                txtMes.setText(String.valueOf(contacto.getCumpleanos().getMonth()));
+                txtMes.setText(String.valueOf(contacto.getCumpleanos().getMonthValue()));
         }
 
         // Agregar listener para detectar selección de cliente
@@ -122,6 +125,7 @@ public class GestionContactoController {
 
         public void setContactos(){
                 tblListContactos.setItems(gestionServicio.obtenerContactos());
+                tblListContactos.refresh();
         }
 
 
@@ -134,18 +138,25 @@ public class GestionContactoController {
                 String correo= txtCorreo.getText();
                 int dia= Integer.parseInt(txtDia.getText());
                 int mes= Integer.parseInt(txtMes.getText());
-                try {gestionServicio.actualizarContacto(telefonoActualizar,nombre, apellido,telefono, correo,dia, mes);} catch (
+                try {
+                        gestionServicio.actualizarContacto(telefonoActualizar,nombre, apellido,telefono, correo,dia, mes);
+                        handleBtnLimpiarCampos();
+                        setContactos();
+                } catch (
                         Exception e) {
                         App.mostrarAlerta("Error",e.getMessage());
                 }
-                setContactos();
-                tblListContactos.refresh();
-
         }
 
         @FXML
         void handleBtnBuscar(ActionEvent event) {
-                System.out.println("Actualizando Contacto");
+                String nombre = txtBusquedaPorNombre.getText();
+                try{
+                        App.mostrarMensaje("Contactos encontrados", ContactoServicio.obtenerContactosCadena(gestionServicio.filtrarContactosNombre(nombre)));
+                }
+                catch (Exception e) {
+                        App.mostrarAlerta("Error",e.getMessage());
+                }
         }
 
         @FXML
@@ -155,19 +166,48 @@ public class GestionContactoController {
                         return;
                 }
                 String telefonoEliminar=contactoSeleccionado.getTelefono();
-                try{gestionServicio.eliminarContacto(telefonoEliminar);}
+                try{
+                        gestionServicio.eliminarContacto(telefonoEliminar);
+                        handleBtnLimpiarCampos();
+                        setContactos();
+                }
                 catch (Exception e){
                         App.mostrarAlerta("Error",e.getMessage());
                 }
-                setContactos();
-                tblListContactos.refresh();
-
         }
 
         @FXML
         void handleBtnFiltrar(ActionEvent event) {
+                TipoBusquedaContactos tipoBusqueda = choiseTipoBusquedaContacto.getValue();
+                String parametro = txtFiltro.getText();
+
+                try{
+                        tblListContactos.setItems(gestionServicio.filtrarContactosNombreTelefono(tipoBusqueda, parametro));
+                }
+                catch (Exception e) {
+                        App.mostrarAlerta("Error",e.getMessage());
+                }
 
         }
+
+        @FXML
+        void handleBtnLimpiarCampos() {
+                txtNombre.clear();
+                txtApellido.clear();
+                txtTelefono.clear();
+                txtCorreo.clear();
+                txtDia.clear();
+                txtMes.clear();
+                choiseTipoBusquedaContacto.setValue(null);
+                setContactos();
+                limpiarSeleccion();
+        }
+
+        private void limpiarSeleccion() {
+                contactoSeleccionado = null;
+                tblListContactos.getSelectionModel().clearSelection();
+}
+
 
         @FXML
         void handleBtnRegistrar(ActionEvent event) {
@@ -178,19 +218,19 @@ public class GestionContactoController {
                 int dia= Integer.parseInt(txtDia.getText());
                 int mes= Integer.parseInt(txtMes.getText());
 
-                try {gestionServicio.registrarContacto(nombre, apellido,telefono, correo,dia, mes);} catch (
+                try {
+                        gestionServicio.registrarContacto(nombre, apellido,telefono, correo,dia, mes);
+                        handleBtnLimpiarCampos();
+                        setContactos();
+                } catch (
                         Exception e) {
                     App.mostrarAlerta("Error",e.getMessage());
                 }
-                setContactos();
-                tblListContactos.refresh();
         }
 
         @FXML
         void handleBtnAgregarFoto(ActionEvent event) {
                 System.out.println("Actualizando Contacto");
         }
-
-
     }
 
