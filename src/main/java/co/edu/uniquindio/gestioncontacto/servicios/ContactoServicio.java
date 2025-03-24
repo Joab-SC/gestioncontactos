@@ -57,7 +57,7 @@ public class ContactoServicio {
         contactoActulizar.setCumpleanos(cumpleanos);
     }
 
-    private Contacto buscarContactoTelefono(String telefono) throws Exception {
+    public Contacto buscarContactoTelefono(String telefono) throws Exception {
         Contacto contactoBuscado = repositorioContacto.obtenerContactoTelefono(telefono);
         if (contactoBuscado == null) {
             throw new Exception("El contacto no fue encontrado");
@@ -66,7 +66,7 @@ public class ContactoServicio {
     }
 
 
-    private ObservableList<Contacto> filtrarContactosNombreTelefono(TipoBusquedaContactos tipoBusqueda, String parametro) throws Exception {
+    public ObservableList<Contacto> filtrarContactosNombreTelefono(TipoBusquedaContactos tipoBusqueda, String parametro) throws Exception {
         ObservableList<Contacto> contactosFiltrados = FXCollections.observableArrayList();;
         switch (tipoBusqueda) {
             case NOMBRE -> contactosFiltrados = filtrarContactosNombre(parametro);
@@ -76,7 +76,7 @@ public class ContactoServicio {
     }
 
 
-    private ObservableList<Contacto> filtrarContactosNombre(String nombre) throws Exception {
+    public ObservableList<Contacto> filtrarContactosNombre(String nombre) throws Exception {
         ObservableList<Contacto> contactosNombre = repositorioContacto.obtenerContactosNombre(nombre);
         if(contactosNombre.isEmpty()) {throw new Exception("No existen contactos con ese nombre");}
         return contactosNombre;

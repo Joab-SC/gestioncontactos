@@ -3,6 +3,7 @@ import co.edu.uniquindio.gestioncontacto.App;
 import co.edu.uniquindio.gestioncontacto.modelo.Contacto;
 import co.edu.uniquindio.gestioncontacto.modelo.TipoBusquedaContactos;
 import co.edu.uniquindio.gestioncontacto.servicios.ContactoServicio;
+import co.edu.uniquindio.gestioncontacto.servicios.GestionServicio;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
@@ -75,16 +76,16 @@ public class GestionContactoController {
         @FXML
         private TextField txtMes;
 
-        private ContactoServicio contactoServicio;
+        private GestionServicio gestionServicio;
 
         @FXML
         public void initialize(){
-            contactoServicio= App.getContactoServicio();
-                tbcNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
-                tbcApellido.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getApellido()));
-                tbcTelefono.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono()));
-                tbcCorreo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCorreo()));
-                tbcCumple.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().obtenerCumpleCadenas()));
+            gestionServicio= App.getGestionServicio();
+            tbcNombre.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getNombre()));
+            tbcApellido.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getApellido()));
+            tbcTelefono.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTelefono()));
+            tbcCorreo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCorreo()));
+            tbcCumple.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().obtenerCumpleCadenas()));
         }
         @FXML
         void handleBtnActualizar(ActionEvent event) {

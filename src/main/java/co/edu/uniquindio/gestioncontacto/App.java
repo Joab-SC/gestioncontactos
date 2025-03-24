@@ -2,6 +2,7 @@ package co.edu.uniquindio.gestioncontacto;
 
 import co.edu.uniquindio.gestioncontacto.repositorios.RepositorioContacto;
 import co.edu.uniquindio.gestioncontacto.servicios.ContactoServicio;
+import co.edu.uniquindio.gestioncontacto.servicios.GestionServicio;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,6 +12,7 @@ import javafx.stage.Stage;
 public class App extends Application {
     private static RepositorioContacto repositorioContacto;
     private static ContactoServicio contactoServicio;
+    private static GestionServicio gestionServicio;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -29,10 +31,11 @@ public class App extends Application {
     public static void main(String[] args) {
         repositorioContacto = new RepositorioContacto();
         contactoServicio= new ContactoServicio(repositorioContacto);
+        gestionServicio = new GestionServicio(contactoServicio);
         launch(App.class, args);
     }
-    public static ContactoServicio getContactoServicio(){
-        return contactoServicio;
+    public static GestionServicio getGestionServicio(){
+        return gestionServicio;
     }
 
 }
