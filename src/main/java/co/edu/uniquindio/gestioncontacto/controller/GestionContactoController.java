@@ -24,6 +24,9 @@ public class GestionContactoController {
         private Button btnActualizar;
 
         @FXML
+        private Button btnFotoPerfil;
+
+        @FXML
         private Button btnBuscar;
 
         @FXML
@@ -76,6 +79,13 @@ public class GestionContactoController {
 
         @FXML
         private TextField txtMes;
+
+        @FXML
+        private TextField txtBusquedaPorNombre;
+
+        @FXML
+        private TextField txtFiltro;
+
 
         private GestionServicio gestionServicio;
 
@@ -135,6 +145,11 @@ public class GestionContactoController {
 
         @FXML
         void handleBtnRegistrar(ActionEvent event) {
+                System.out.println("Actualizando Contacto");
+        }
+
+        @FXML
+        void handleBtnAgregarFoto(ActionEvent event) {
                 System.out.println("Actualizando Contacto");
         }
 
