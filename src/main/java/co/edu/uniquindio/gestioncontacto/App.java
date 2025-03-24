@@ -9,10 +9,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import lombok.Getter;
 
 public class App extends Application {
     private static RepositorioContacto repositorioContacto;
     private static ContactoServicio contactoServicio;
+    @Getter
     private static GestionServicio gestionServicio;
 
     @Override
@@ -34,9 +36,6 @@ public class App extends Application {
         contactoServicio= new ContactoServicio(repositorioContacto);
         gestionServicio = new GestionServicio(contactoServicio);
         launch(App.class, args);
-    }
-    public static GestionServicio getGestionServicio(){
-        return gestionServicio;
     }
 
     public static void mostrarAlerta(String titulo, String mensaje) {
