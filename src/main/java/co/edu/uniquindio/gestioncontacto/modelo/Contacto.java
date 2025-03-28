@@ -13,7 +13,7 @@ import java.time.MonthDay;
 @Setter
 @AllArgsConstructor
 public class Contacto {
-    private String nombre, apellido, telefono, correo;
+    private String nombre, apellido, telefono, correo, rutaFoto;
     private MonthDay cumpleanos;
 
     public String obtenerCumpleCadenas() {

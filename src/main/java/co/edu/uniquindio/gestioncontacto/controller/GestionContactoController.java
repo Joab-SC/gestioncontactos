@@ -16,6 +16,19 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+
+import java.io.File;
+import java.nio.file.StandardCopyOption;
 import java.time.MonthDay;
 
 public class GestionContactoController {
@@ -89,8 +102,14 @@ public class GestionContactoController {
         @FXML
         private TextField txtFiltro;
 
+        @FXML
+        private ImageView imgFotoPerfil;
+
+
 
         private GestionServicio gestionServicio;
+
+        private String rutaImagenContacto;
 
         private Contacto contactoSeleccionado;
         @FXML
@@ -113,6 +132,19 @@ public class GestionContactoController {
                 txtCorreo.setText(contacto.getCorreo());
                 txtDia.setText(String.valueOf(contacto.getCumpleanos().getDayOfMonth()));
                 txtMes.setText(String.valueOf(contacto.getCumpleanos().getMonthValue()));
+
+                if (contacto.getRutaFoto() != null && !contacto.getRutaFoto().isEmpty()) {
+                        try {
+                                FileInputStream input = new FileInputStream(contacto.getRutaFoto());
+                                Image imagen = new Image(input);
+                                imgFotoPerfil.setImage(imagen);
+                        } catch (FileNotFoundException e) {
+                                System.out.println("No se encontró la imagen: " + contacto.getRutaFoto());
+                        }
+                } else {
+                        imgFotoPerfil.setImage(null); // O puedes poner una imagen por defecto
+                }
+
         }
 
         // Agregar listener para detectar selección de cliente
@@ -131,15 +163,15 @@ public class GestionContactoController {
 
         @FXML
         void handleBtnActualizar(ActionEvent event) {
-                String telefonoActualizar=contactoSeleccionado.getTelefono();
-                String nombre= txtNombre.getText();
-                String apellido= txtApellido.getText();
-                String telefono= txtTelefono.getText();
-                String correo= txtCorreo.getText();
-                int dia= Integer.parseInt(txtDia.getText());
-                int mes= Integer.parseInt(txtMes.getText());
+                String telefonoActualizar=contactoSeleccionado.getTelefono().trim();
+                String nombre= txtNombre.getText().trim();
+                String apellido= txtApellido.getText().trim();
+                String telefono= txtTelefono.getText().trim();
+                String correo= txtCorreo.getText().trim();
+                int dia= Integer.parseInt(txtDia.getText().trim());
+                int mes= Integer.parseInt(txtMes.getText().trim());
                 try {
-                        gestionServicio.actualizarContacto(telefonoActualizar,nombre, apellido,telefono, correo,dia, mes);
+                        gestionServicio.actualizarContacto(telefonoActualizar,nombre, apellido,telefono, correo, rutaImagenContacto, dia, mes);
                         handleBtnLimpiarCampos();
                         setContactos();
                 } catch (
@@ -150,9 +182,9 @@ public class GestionContactoController {
 
         @FXML
         void handleBtnBuscar(ActionEvent event) {
-                String nombre = txtBusquedaPorNombre.getText();
+                String nombre = txtBusquedaPorNombre.getText().trim();
                 try{
-                        App.mostrarMensaje("Contactos encontrados", ContactoServicio.obtenerContactosCadena(gestionServicio.filtrarContactosNombre(nombre)));
+                        App.mostrarMensaje("Contactos encontrados", gestionServicio.filtrarContactosNombre(nombre));
                 }
                 catch (Exception e) {
                         App.mostrarAlerta("Error",e.getMessage());
@@ -179,7 +211,7 @@ public class GestionContactoController {
         @FXML
         void handleBtnFiltrar(ActionEvent event) {
                 TipoBusquedaContactos tipoBusqueda = choiseTipoBusquedaContacto.getValue();
-                String parametro = txtFiltro.getText();
+                String parametro = txtFiltro.getText().trim();
 
                 try{
                         tblListContactos.setItems(gestionServicio.filtrarContactosNombreTelefono(tipoBusqueda, parametro));
@@ -198,7 +230,10 @@ public class GestionContactoController {
                 txtCorreo.clear();
                 txtDia.clear();
                 txtMes.clear();
+                txtBusquedaPorNombre.clear();
+                txtFiltro.clear();
                 choiseTipoBusquedaContacto.setValue(null);
+                imgFotoPerfil.setImage(null);
                 setContactos();
                 limpiarSeleccion();
         }
@@ -211,15 +246,15 @@ public class GestionContactoController {
 
         @FXML
         void handleBtnRegistrar(ActionEvent event) {
-                String nombre= txtNombre.getText();
-                String apellido= txtApellido.getText();
-                String telefono= txtTelefono.getText();
-                String correo= txtCorreo.getText();
-                int dia= Integer.parseInt(txtDia.getText());
-                int mes= Integer.parseInt(txtMes.getText());
+                String nombre= txtNombre.getText().trim();
+                String apellido= txtApellido.getText().trim();
+                String telefono= txtTelefono.getText().trim();
+                String correo= txtCorreo.getText().trim();
+                int dia= Integer.parseInt(txtDia.getText().trim());
+                int mes= Integer.parseInt(txtMes.getText().trim());
 
                 try {
-                        gestionServicio.registrarContacto(nombre, apellido,telefono, correo,dia, mes);
+                        gestionServicio.registrarContacto(nombre, apellido,telefono, correo,dia, rutaImagenContacto, mes);
                         handleBtnLimpiarCampos();
                         setContactos();
                 } catch (
@@ -230,7 +265,35 @@ public class GestionContactoController {
 
         @FXML
         void handleBtnAgregarFoto(ActionEvent event) {
-                System.out.println("Actualizando Contacto");
+                FileChooser fileChooser = new FileChooser();
+                fileChooser.setTitle("Seleccionar Imagen");
+
+                fileChooser.getExtensionFilters().add(
+                        new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif")
+                );
+
+                File imagenSeleccionada = fileChooser.showOpenDialog(btnFotoPerfil.getScene().getWindow());
+
+                if (imagenSeleccionada != null) {
+                        try {
+                                // Crear carpeta si no existe
+                                Path carpetaImagenes = Paths.get("imagenes");
+                                Files.createDirectories(carpetaImagenes);
+
+                                Path destino = carpetaImagenes.resolve(imagenSeleccionada.getName());
+                                Files.copy(imagenSeleccionada.toPath(), destino, StandardCopyOption.REPLACE_EXISTING);
+
+                                rutaImagenContacto = destino.toString();
+
+                                Image image = new Image(new FileInputStream(rutaImagenContacto));
+                                imgFotoPerfil.setImage(image);
+
+                                System.out.println("Imagen almacenada: " + rutaImagenContacto);
+                        } catch (IOException e) {
+                                App.mostrarAlerta("Error", "No se pudo guardar la imagen.");
+                        }
+                }
         }
-    }
+
+}
 

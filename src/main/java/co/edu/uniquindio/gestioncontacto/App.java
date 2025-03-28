@@ -1,15 +1,22 @@
 package co.edu.uniquindio.gestioncontacto;
 
+import co.edu.uniquindio.gestioncontacto.modelo.Contacto;
 import co.edu.uniquindio.gestioncontacto.repositorios.RepositorioContacto;
 import co.edu.uniquindio.gestioncontacto.servicios.ContactoServicio;
 import co.edu.uniquindio.gestioncontacto.servicios.GestionServicio;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import lombok.Getter;
+
+import java.io.File;
+import java.util.List;
 
 public class App extends Application {
     private static RepositorioContacto repositorioContacto;
@@ -38,16 +45,37 @@ public class App extends Application {
         launch(App.class, args);
     }
 
+    public static void mostrarMensaje(String titulo, ObservableList<Contacto> contactos) {
+            for (Contacto contacto : contactos) {
+                File archivo = new File(contacto.getRutaFoto());
+
+                ImageView imageView = null;
+
+                if (archivo.exists()) {
+                    Image imagen = new Image(archivo.toURI().toString());
+                    imageView = new ImageView(imagen);
+                    imageView.setFitWidth(100);
+                    imageView.setFitHeight(100);
+                    imageView.setPreserveRatio(true);
+                }
+
+                Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+                alerta.setTitle(titulo);
+                alerta.setHeaderText(null);
+                alerta.setContentText(contacto.toString());
+
+                if (imageView != null) {
+                    alerta.setGraphic(imageView);
+                }
+
+                alerta.showAndWait(); // <-- esto pausa hasta que el usuario cierre la alerta
+            }
+        }
+
+
+
     public static void mostrarAlerta(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
-    }
-
-    public static void mostrarMensaje(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);

@@ -15,9 +15,9 @@ public class ContactoServicio {
         this.repositorioContacto = repositorioContacto;
     }
 
-    public void registrarContacto(String nombre, String apellido, String telefono, String correo,
+    public void registrarContacto(String nombre, String apellido, String telefono, String correo, String ruta,
                                   MonthDay cumpleanos) throws Exception {
-        if (nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || correo.isEmpty() || cumpleanos == null) {
+        if (nombre.isEmpty() || apellido.isEmpty() || telefono.isEmpty() || correo.isEmpty() || ruta == null || ruta.isEmpty() || cumpleanos == null) {
             throw new Exception("Todos los campos son obligatorios");
         }
         if (!telefono.trim().matches("^3\\d{9}$")) {
@@ -32,7 +32,7 @@ public class ContactoServicio {
                 throw new Exception("El numero telefónico ya existe en la lista de contactos");
             }
         }
-        Contacto contacto = new Contacto(nombre, apellido, telefono, correo, cumpleanos);
+        Contacto contacto = new Contacto(nombre, apellido, telefono, correo, ruta, cumpleanos);
         repositorioContacto.agregarContacto(contacto);
     }
 
@@ -44,8 +44,8 @@ public class ContactoServicio {
         repositorioContacto.eliminarContacto(contactoEliminar);
     }
 
-    public void actualizarContacto(String telefonoActualizar, String nombre, String apellido, String telefonoNuevo, String correo, MonthDay cumpleanos) throws Exception {
-        if (nombre.isEmpty() || apellido.isEmpty() || telefonoNuevo.isEmpty() || correo.isEmpty() || cumpleanos == null) {
+    public void actualizarContacto(String telefonoActualizar, String nombre, String apellido, String telefonoNuevo, String correo, String ruta, MonthDay cumpleanos) throws Exception {
+        if (nombre.isEmpty() || apellido.isEmpty() || telefonoNuevo.isEmpty() || correo.isEmpty() || ruta == null|| ruta.isEmpty()|| cumpleanos == null) {
             throw new Exception("Los campos son obligatorios");
         }
 
@@ -61,6 +61,7 @@ public class ContactoServicio {
         contactoActulizar.setApellido(apellido);
         contactoActulizar.setTelefono(telefonoNuevo);
         contactoActulizar.setCorreo(correo);
+        contactoActulizar.setRutaFoto(ruta);
         contactoActulizar.setCumpleanos(cumpleanos);
     }
 
