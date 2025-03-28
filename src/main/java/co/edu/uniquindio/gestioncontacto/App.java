@@ -30,7 +30,7 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(App.class.getResource("view/ViewContactos.fxml"));
         Parent parent = loader.load();
 
-        Scene scene = new Scene(parent, 1000, 360);
+        Scene scene = new Scene(parent, 800, 360);
         stage.setScene(scene);
         stage.setTitle("UQ Notas");
         stage.setResizable(false);
